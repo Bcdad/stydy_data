@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.staticfile.org/vue/3.2.36/vue.global.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- <div id="app">
+        <counter :count="count"></counter>
+    </div>
+    <script>
+        const component = {
+            props: ['count'],
+            template: `<button id="test" @click="count++">{{count}}</button>`
+        }
+        const app = Vue.createApp({
+            data() {
+                return { count: 0 }
+            }
+        })
+        app.component('counter', component);
+        const a = app.mount('#app') -->
+    <div id="app">
+        <counter :count="count"></counter>
+    </div>
+    <script>
+        const component = {
+            template: `<button id="test" @click="count++">{{count}}</button>`,
+            data() {
+                return {
+                    count: 0
+                }
+
+            }
+        }
+        const app = Vue.createApp({
+            data() {
+                return { count: 0 }
+            }
+        })
+        app.component('counter', component);
+        const a = app.mount('#app')
+    </script>
+
+</body>
+
+</html>
