@@ -1,4 +1,4 @@
-# redare使用
+# 二进制程序静态分析技术
 
 ## redare常用指令
 
@@ -81,3 +81,33 @@ ctrl+shift+w：拍摄IDA快照
 
 u：undefine，取消定义函数、代码、数据的定义
 ```
+
+## 提取程序控制流图CFG
+
+### 使用python自动生成  
+
+使用到的工具<https://github.com/axt/angr-utils>  
+依旧是之前的二进制文件
+
+```python
+import angr
+from angrutils import *
+proj = angr.Project('/root/Desktop/radare/hello', load_options={'auto_load_libs': False})
+main = proj.loader.main_object.get_symbol("main")
+start_state = proj.factory.blank_state(addr=main.rebased_addr)
+cfg = proj.analyses.CFGEmulated(fail_fast=True, starts=[main.rebased_addr], initial_state=start_state)
+plot_cfg(cfg, "ais3_cfg", asminst=True, remove_imports=True, remove_path_terminator=True)  
+```
+
+运行python脚本，自动在`angr-dev`(当前文件夹)生成CFG图  
+![''](./image/pp.png)  
+![''](./image/ais3_cfg.png)  
+
+### 通过反汇编手工生成  
+
+一个CFG是一个基本块为节点，jump/ret/call为边的图
+可使用ida先进行反汇编  
+![''](./image/conv.png)  
+由图可知分别以`main`,`_printf`,`adder`等为节点  
+
+程序控制流图代表了一个程序会遍历的所有路径，帮助我们理解程序的逻辑结构，更好的发现漏洞并改进代码
